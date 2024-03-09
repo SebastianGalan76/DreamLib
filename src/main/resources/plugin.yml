@@ -1,0 +1,5 @@
+name: DreamLib
+version: '${project.version}'
+main: pl.dream.dreamlib.DreamLib
+api-version: '1.20'
+authors: [DreaMPL]
