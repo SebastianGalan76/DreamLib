@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class Color {
      * @param message The message we want to convert
      * @return The converted message
      */
-    public static String fix(String message){
+    public static @NotNull String fix(@NotNull String message){
         return ChatColor.translateAlternateColorCodes('&',message);
     }
 
@@ -28,7 +29,11 @@ public class Color {
      * @param messageList The list of strings we want to convert
      * @return The converted message
      */
-    public static List<String> fix(List<String> messageList){
+    public static @NotNull List<String> fix(@NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return messageList;
+        }
+
         List<String> fixedMessageList = new ArrayList<>();
         for(String message:messageList){
             fixedMessageList.add(fix(message));
@@ -44,7 +49,7 @@ public class Color {
      * @param message The message we want to convert
      * @return The converted message
      */
-    public static String fixRGB(String message) {
+    public static @NotNull String fixRGB(@NotNull String message) {
         Pattern unicode = Pattern.compile("\\\\u\\+[a-fA-F0-9]{4}");
         Matcher match = unicode.matcher(message);
         while (match.find()) {
@@ -69,7 +74,11 @@ public class Color {
      * @param messageList The list of strings we want to convert
      * @return The converted list of strings
      */
-    public static List<String> fixRGB(List<String> messageList){
+    public static @NotNull List<String> fixRGB(@NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return messageList;
+        }
+
         List<String> fixedMessageList = new ArrayList<>();
         for(String message:messageList){
             fixedMessageList.add(fixRGB(message));
@@ -85,7 +94,7 @@ public class Color {
      * @param player Message recipient
      * @param message The string we want to send to the player
      */
-    public static void sendMessage(Player player, String message){
+    public static void sendMessage(@NotNull Player player, @NotNull String message){
         player.sendMessage(fixRGB(message));
     }
 
@@ -95,9 +104,14 @@ public class Color {
      * @param player Message recipient
      * @param messageList The list of strings we want to send to the player
      */
-    public static void sendMessage(Player player, List<String> messageList){
+    public static void sendMessage(@NotNull Player player, @NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return;
+        }
+
+        messageList = fixRGB(messageList);
         for(String message:messageList){
-            player.sendMessage(fixRGB(message));
+            player.sendMessage(message);
         }
     }
 
@@ -107,7 +121,7 @@ public class Color {
      * @param sender Message recipient
      * @param message The string we want to send to the sender
      */
-    public static void sendMessage(CommandSender sender, String message){
+    public static void sendMessage(@NotNull CommandSender sender, @NotNull String message){
         sender.sendMessage(fixRGB(message));
     }
 
@@ -117,9 +131,14 @@ public class Color {
      * @param sender Message recipient
      * @param messageList The list of strings we want to send to the sender
      */
-    public static void sendMessage(CommandSender sender, List<String> messageList){
+    public static void sendMessage(@NotNull CommandSender sender, @NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return;
+        }
+
+        messageList = fixRGB(messageList);
         for(String message:messageList){
-            sender.sendMessage(fixRGB(message));
+            sender.sendMessage(message);
         }
     }
 
@@ -129,7 +148,7 @@ public class Color {
      *
      * @param message The string we want to send to all online players
      */
-    public static void sendGlobalMessage(String message){
+    public static void sendGlobalMessage(@NotNull String message){
         message = fixRGB(message);
 
         for(Player player: Bukkit.getOnlinePlayers()){
@@ -143,7 +162,11 @@ public class Color {
      *
      * @param messageList The list of strings we want to send to all online players
      */
-    public static void sendGlobalMessage(List<String> messageList){
+    public static void sendGlobalMessage(@NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return;
+        }
+
         messageList = fixRGB(messageList);
 
         for(Player player: Bukkit.getOnlinePlayers()){
@@ -159,7 +182,7 @@ public class Color {
      *
      * @param message The string we want to broadcast
      */
-    public static void sendBroadcast(String message){
+    public static void sendBroadcast(@NotNull String message){
         Bukkit.getServer().broadcastMessage(fixRGB(message));
     }
 
@@ -169,7 +192,11 @@ public class Color {
      *
      * @param messageList The list of strings we want to broadcast
      */
-    public static void sendBroadcast(List<String> messageList){
+    public static void sendBroadcast(@NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return;
+        }
+
         messageList = fixRGB(messageList);
         Server server = Bukkit.getServer();
 

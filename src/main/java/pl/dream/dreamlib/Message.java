@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class Message {
      * @param player Message recipient
      * @param message The string we want to send to the player
      */
-    public static void sendMessage(Player player,String message){
+    public static void sendMessage(@NotNull Player player,@NotNull String message){
         player.sendMessage(message);
     }
 
@@ -27,7 +28,11 @@ public class Message {
      * @param player Message recipient
      * @param messageList The list of strings we want to send to the player
      */
-    public static void sendMessage(Player player, List<String> messageList){
+    public static void sendMessage(@NotNull Player player, @NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return;
+        }
+
         for(String message:messageList){
             player.sendMessage(message);
         }
@@ -39,7 +44,7 @@ public class Message {
      * @param sender Message recipient
      * @param message The string we want to send to the sender
      */
-    public static void sendMessage(CommandSender sender, String message){
+    public static void sendMessage(@NotNull CommandSender sender, @NotNull String message){
         sender.sendMessage(message);
     }
 
@@ -49,7 +54,11 @@ public class Message {
      * @param sender Message recipient
      * @param messageList The list of strings we want to send to the sender
      */
-    public static void sendMessage(CommandSender sender, List<String> messageList){
+    public static void sendMessage(@NotNull CommandSender sender, @NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return;
+        }
+
         for(String message:messageList){
             sender.sendMessage(message);
         }
@@ -61,7 +70,7 @@ public class Message {
      *
      * @param message The string we want to send to all online players
      */
-    public static void sendGlobalMessage(String message){
+    public static void sendGlobalMessage(@NotNull String message){
         for(Player player: Bukkit.getOnlinePlayers()){
             player.sendMessage(message);
         }
@@ -73,7 +82,11 @@ public class Message {
      *
      * @param messageList The list of strings we want to send to all online players
      */
-    public static void sendGlobalMessage(List<String> messageList){
+    public static void sendGlobalMessage(@NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return;
+        }
+
         for(Player player: Bukkit.getOnlinePlayers()){
             for(String message:messageList){
                 player.sendMessage(message);
@@ -87,7 +100,7 @@ public class Message {
      *
      * @param message The string we want to broadcast
      */
-    public static void sendBroadcast(String message){
+    public static void sendBroadcast(@NotNull String message){
         Bukkit.getServer().broadcastMessage(message);
     }
 
@@ -97,9 +110,12 @@ public class Message {
      *
      * @param messageList The list of strings we want to broadcast
      */
-    public static void sendBroadcast(List<String> messageList){
-        Server server = Bukkit.getServer();
+    public static void sendBroadcast(@NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return;
+        }
 
+        Server server = Bukkit.getServer();
         for(String message:messageList){
             server.broadcastMessage(message);
         }
