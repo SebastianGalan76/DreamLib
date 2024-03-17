@@ -1,12 +1,15 @@
 package pl.dream.dreamlib;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -21,7 +24,7 @@ public class Config {
      *
      * @param config The config from which to retrieve the ItemStack
      * @param path The path in the configuration where the ItemStack is located
-     * @return A ItemStack retrieved from the config, or null if there is an error in the config
+     * @return ItemStack retrieved from the config, or null if there is an error in the config
      */
     public static @Nullable ItemStack getItemStack(@NotNull FileConfiguration config, @NotNull String path){
         //Loading material
@@ -85,7 +88,7 @@ public class Config {
      *
      * @param config The config from which to retrieve the material
      * @param materialPath The path in the configuration where the material is located
-     * @return A material retrieved from the config, or null if the material is invalid
+     * @return Material retrieved from the config, or null if the material is invalid
      */
     public static @Nullable Material getMaterial(@NotNull FileConfiguration config, String materialPath){
         String materialString = config.getString(materialPath);
@@ -106,7 +109,7 @@ public class Config {
      *
      * @param config The config from which to retrieve the enchantments
      * @param enchantsPath The path in the configuration where the enchantments are located
-     * @return A HashMap containing Enchantment objects mapped to their respective levels, or null if no enchantments are found
+     * @return HashMap containing Enchantment objects mapped to their respective levels, or null if no enchantments are found
      */
     public static @Nullable HashMap<Enchantment, Integer> getEnchantments(@NotNull FileConfiguration config, String enchantsPath){
         HashMap<Enchantment, Integer> enchantments = new HashMap<>();
@@ -144,7 +147,7 @@ public class Config {
      *
      * @param config The config from which to retrieve the enchantments
      * @param itemFlagPath The path in the configuration where the ItemFlags are located
-     * @return A list of materials retrieved from the config, or null if no item flags are found
+     * @return List of materials retrieved from the config, or null if no item flags are found
      */
     public static @Nullable List<ItemFlag> getItemFlags(@NotNull FileConfiguration config, String itemFlagPath){
         List<ItemFlag> itemFlagList = new ArrayList<>();
@@ -168,5 +171,59 @@ public class Config {
         }
 
         return itemFlagList;
+    }
+
+    /**
+     * Retrieves Location from the specified configuration using the provided path
+     *
+     * @param config The config from which to retrieve the location
+     * @param locationPath The path in the configuration where the Location is located
+     * @return  Location retrieved from the config, or null if the location is not saved
+     */
+    public static @Nullable Location getLocation(@NotNull FileConfiguration config, String locationPath){
+        if(config.get(locationPath)==null){
+            return null;
+        }
+
+        String worldName = config.getString(locationPath+".word");
+        if(worldName == null){
+            return null;
+        }
+
+        World world = Bukkit.getWorld(worldName);
+        if(world == null){
+            return null;
+        }
+
+        double x = config.getDouble(locationPath+".x");
+        double y = config.getDouble(locationPath+".y");
+        double z = config.getDouble(locationPath+".z");
+        float yaw = (float)config.getDouble(locationPath+".yaw");
+        float pitch = (float)config.getDouble(locationPath+".pitch");
+
+        return new Location(world, x, y, z, yaw, pitch);
+    }
+
+    /**
+     * Save Location to the specified configuration using the provided path
+     *
+     * @param javaPlugin Plugin
+     * @param locationPath The path in the configuration where the Location should be saved
+     * @param loc Location to save in the config
+     * @return Returns true if we override existing data.
+     */
+    public static boolean setLocation(JavaPlugin javaPlugin, String locationPath, Location loc){
+        FileConfiguration config = javaPlugin.getConfig();
+        boolean override = config.get(locationPath) != null;
+
+        config.set(locationPath+".world", loc.getWorld().getName());
+        config.set(locationPath+".x", loc.getX());
+        config.set(locationPath+".y", loc.getY());
+        config.set(locationPath+".z", loc.getZ());
+        config.set(locationPath+".yaw", loc.getYaw());
+        config.set(locationPath+".pitch", loc.getPitch());
+
+        javaPlugin.saveConfig();
+        return override;
     }
 }
