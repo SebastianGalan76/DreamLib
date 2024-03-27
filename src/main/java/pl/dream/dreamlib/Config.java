@@ -185,7 +185,7 @@ public class Config {
             return null;
         }
 
-        String worldName = config.getString(locationPath+".word");
+        String worldName = config.getString(locationPath+".world");
         if(worldName == null){
             return null;
         }
