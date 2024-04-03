@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 public class Gradient {
     private final static String GRADIENT_PATTERN = "<&#([0-9A-Fa-f]{6})>([^<]+)</&#([0-9A-Fa-f]{6})>";
+    private final static Interpolator linear = new LinearInterpolator();
 
     /**
      * Replaces RGB gradient patterns in the provided text with interpolated colors.
@@ -35,6 +36,32 @@ public class Gradient {
             Color to = new Color(Integer.parseInt(secondColor, 16));
 
             gradientText = rgb(gradientText, from, to, interpolator);
+            stringBuilder.append(gradientText);
+
+            lastIndex = matcher.end();
+        }
+
+        stringBuilder.append(text.substring(lastIndex));
+        return stringBuilder.toString();
+    }
+    public static String fixLinear(String text){
+        Pattern regex = Pattern.compile(GRADIENT_PATTERN);
+        Matcher matcher = regex.matcher(text);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        int lastIndex = 0;
+
+        while (matcher.find()) {
+            String firstColor = matcher.group(1);
+            String gradientText = matcher.group(2);
+            String secondColor = matcher.group(3);
+
+            stringBuilder.append(text.substring(lastIndex, matcher.start()));
+
+            Color from = new Color(Integer.parseInt(firstColor, 16));
+            Color to = new Color(Integer.parseInt(secondColor, 16));
+
+            gradientText = rgb(gradientText, from, to, linear);
             stringBuilder.append(gradientText);
 
             lastIndex = matcher.end();

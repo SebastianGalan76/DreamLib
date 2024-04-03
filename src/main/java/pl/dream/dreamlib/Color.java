@@ -6,6 +6,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import pl.dream.dreamlib.gradient.Gradient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,13 +90,47 @@ public class Color {
     }
 
     /**
+     * This function repairs RGB color codes, gradient(LinearInterpolator) and formatting placeholders.
+     *
+     * @param message The message we want to convert
+     * @return The converted message
+     */
+    public static @NotNull String fixAll(@NotNull String message){
+        message = Gradient.fixLinear(message);
+        message = fixRGB(message);
+
+        return message;
+    }
+
+    /**
+     * This function repairs RGB color codes, gradient(LinearInterpolator) and formatting placeholders
+     * for entire list of strings
+     *
+     * @param messageList The list of strings we want to convert
+     * @return The converted list of strings
+     */
+    public static @NotNull List<String> fixAll(@NotNull List<String> messageList){
+        if(messageList.isEmpty()){
+            return messageList;
+        }
+
+        List<String> fixedMessageList = new ArrayList<>();
+        for(String message:messageList){
+            fixedMessageList.add(fixAll(message));
+
+        }
+
+        return fixedMessageList;
+    }
+
+    /**
      * Sends the specified message to the specified player.
      *
      * @param player Message recipient
      * @param message The string we want to send to the player
      */
     public static void sendMessage(@NotNull Player player, @NotNull String message){
-        player.sendMessage(fixRGB(message));
+        player.sendMessage(fixAll(message));
     }
 
     /**
@@ -109,7 +144,7 @@ public class Color {
             return;
         }
 
-        messageList = fixRGB(messageList);
+        messageList = fixAll(messageList);
         for(String message:messageList){
             player.sendMessage(message);
         }
@@ -122,7 +157,7 @@ public class Color {
      * @param message The string we want to send to the sender
      */
     public static void sendMessage(@NotNull CommandSender sender, @NotNull String message){
-        sender.sendMessage(fixRGB(message));
+        sender.sendMessage(fixAll(message));
     }
 
     /**
@@ -136,7 +171,7 @@ public class Color {
             return;
         }
 
-        messageList = fixRGB(messageList);
+        messageList = fixAll(messageList);
         for(String message:messageList){
             sender.sendMessage(message);
         }
@@ -149,7 +184,7 @@ public class Color {
      * @param message The string we want to send to all online players
      */
     public static void sendGlobalMessage(@NotNull String message){
-        message = fixRGB(message);
+        message = fixAll(message);
 
         for(Player player: Bukkit.getOnlinePlayers()){
             player.sendMessage(message);
@@ -167,7 +202,7 @@ public class Color {
             return;
         }
 
-        messageList = fixRGB(messageList);
+        messageList = fixAll(messageList);
 
         for(Player player: Bukkit.getOnlinePlayers()){
             for(String message:messageList){
@@ -183,7 +218,7 @@ public class Color {
      * @param message The string we want to broadcast
      */
     public static void sendBroadcast(@NotNull String message){
-        Bukkit.getServer().broadcastMessage(fixRGB(message));
+        Bukkit.getServer().broadcastMessage(fixAll(message));
     }
 
     /**
@@ -197,7 +232,7 @@ public class Color {
             return;
         }
 
-        messageList = fixRGB(messageList);
+        messageList = fixAll(messageList);
         Server server = Bukkit.getServer();
 
         for(String message:messageList){
