@@ -36,10 +36,9 @@ public class Color {
         }
 
         List<String> fixedMessageList = new ArrayList<>();
-        for(String message:messageList){
+        messageList.forEach(message -> {
             fixedMessageList.add(fix(message));
-
-        }
+        });
 
         return fixedMessageList;
     }
@@ -81,10 +80,9 @@ public class Color {
         }
 
         List<String> fixedMessageList = new ArrayList<>();
-        for(String message:messageList){
+        messageList.forEach(message -> {
             fixedMessageList.add(fixRGB(message));
-
-        }
+        });
 
         return fixedMessageList;
     }
@@ -115,10 +113,9 @@ public class Color {
         }
 
         List<String> fixedMessageList = new ArrayList<>();
-        for(String message:messageList){
+        messageList.forEach(message -> {
             fixedMessageList.add(fixAll(message));
-
-        }
+        });
 
         return fixedMessageList;
     }
@@ -145,9 +142,7 @@ public class Color {
         }
 
         messageList = fixAll(messageList);
-        for(String message:messageList){
-            player.sendMessage(message);
-        }
+        messageList.forEach(player::sendMessage);
     }
 
     /**
@@ -172,9 +167,7 @@ public class Color {
         }
 
         messageList = fixAll(messageList);
-        for(String message:messageList){
-            sender.sendMessage(message);
-        }
+        messageList.forEach(sender::sendMessage);
     }
 
     /**
@@ -186,9 +179,7 @@ public class Color {
     public static void sendGlobalMessage(@NotNull String message){
         message = fixAll(message);
 
-        for(Player player: Bukkit.getOnlinePlayers()){
-            player.sendMessage(message);
-        }
+        Message.sendGlobalMessage(message);
     }
 
     /**
@@ -203,12 +194,7 @@ public class Color {
         }
 
         messageList = fixAll(messageList);
-
-        for(Player player: Bukkit.getOnlinePlayers()){
-            for(String message:messageList){
-                player.sendMessage(message);
-            }
-        }
+        Message.sendGlobalMessage(messageList);
     }
 
     /**
@@ -218,7 +204,7 @@ public class Color {
      * @param message The string we want to broadcast
      */
     public static void sendBroadcast(@NotNull String message){
-        Bukkit.getServer().broadcastMessage(fixAll(message));
+        Message.sendBroadcast(fixAll(message));
     }
 
     /**
@@ -233,10 +219,6 @@ public class Color {
         }
 
         messageList = fixAll(messageList);
-        Server server = Bukkit.getServer();
-
-        for(String message:messageList){
-            server.broadcastMessage(message);
-        }
+        Message.sendBroadcast(messageList);
     }
 }

@@ -64,7 +64,7 @@ public class Text {
         String spaces = " ".repeat(padding);
         middleText = spaces + middleText;
 
-        if(suffix.length()!=0){
+        if(!suffix.isEmpty()){
             middleText+= spaces;
             if(length%2!=0){
                 middleText += " ";
@@ -112,10 +112,6 @@ public class Text {
     }
 
     private static void centerList(List<String> text, int maxLength){
-        for(int i=0;i<text.size();i++){
-            String line = text.get(i);
-
-            text.set(i, center(line, maxLength));
-        }
+        text.replaceAll(s -> center(s, maxLength));
     }
 }

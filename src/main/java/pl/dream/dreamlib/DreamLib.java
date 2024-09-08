@@ -11,9 +11,4 @@ public final class DreamLib extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ClickInventoryListener(), this);
         getServer().getPluginManager().registerEvents(new DragItemListener(), this);
     }
-
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
 }

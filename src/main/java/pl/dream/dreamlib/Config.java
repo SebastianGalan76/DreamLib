@@ -59,7 +59,7 @@ public class Config {
         //Loading glowing
         boolean glowing = config.getBoolean(path+".glowing", false);
         if(glowing){
-            itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
+            itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 

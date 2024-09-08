@@ -33,9 +33,7 @@ public class Message {
             return;
         }
 
-        for(String message:messageList){
-            player.sendMessage(message);
-        }
+        messageList.forEach(player::sendMessage);
     }
 
     /**
@@ -59,9 +57,7 @@ public class Message {
             return;
         }
 
-        for(String message:messageList){
-            sender.sendMessage(message);
-        }
+        messageList.forEach(sender::sendMessage);
     }
 
     /**
@@ -71,9 +67,9 @@ public class Message {
      * @param message The string we want to send to all online players
      */
     public static void sendGlobalMessage(@NotNull String message){
-        for(Player player: Bukkit.getOnlinePlayers()){
+        Bukkit.getOnlinePlayers().forEach(player -> {
             player.sendMessage(message);
-        }
+        });
     }
 
     /**
@@ -87,11 +83,9 @@ public class Message {
             return;
         }
 
-        for(Player player: Bukkit.getOnlinePlayers()){
-            for(String message:messageList){
-                player.sendMessage(message);
-            }
-        }
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            sendMessage(player, messageList);
+        });
     }
 
     /**
@@ -116,8 +110,6 @@ public class Message {
         }
 
         Server server = Bukkit.getServer();
-        for(String message:messageList){
-            server.broadcastMessage(message);
-        }
+        messageList.forEach(Message::sendBroadcast);
     }
 }
